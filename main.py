@@ -3,7 +3,6 @@ import openai
 import os
 from dotenv import load_dotenv
 from extras import *
-from saveasdocx import *
 import random
 
 load_dotenv()
