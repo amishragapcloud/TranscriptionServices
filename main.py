@@ -63,7 +63,7 @@ else:
             with open(uploaded_file.name, "rb") as audio_file:
                 transcript = openai.audio.transcriptions.create(
                     model=deployment_id,
-                    file=audio_file
+                    file=audio_file,response_format="srt"
                 )
                 
                 st.audio(uploaded_file, format='audio/mp3')
