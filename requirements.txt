@@ -1,6 +1,9 @@
 openai >= 1.0.0
 python-dotenv == 1.0.1
-streamlit
-azure-ai-textanalytics
-sumy
-
+pygal
+cairosvg
+pyodbc
+assemblyai
+openai
+azure-mgmt-storage
+azure-ai-ml
