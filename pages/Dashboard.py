@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 import random
 import pyodbc
 import assemblyai as aai
-import plotapi
+
 
 load_dotenv()
 
