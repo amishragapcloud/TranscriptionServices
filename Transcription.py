@@ -161,7 +161,10 @@ else:
                                            )
 
 
-            st.markdown(f'<div style="background-color: {random_color()}; padding: 10px; border-radius: 5px;"><h3>Sentiment Score:</h3></div>', unsafe_allow_html=True)
+            st.markdown(f'<div style="background-color: {random_color()}; padding: 10px; border-radius: 5px;">'
+            f'<h4 style="font-size: 20px;">Sentiment Score (0-100%)</h4>'
+            f'<p style="font-size: 16px;">Sentiment Score = ((Positive Word Count) - (Negative Word Count)) Expressed as % of difference.</p>'
+            f'</div>', unsafe_allow_html=True)
             st.write(sentiscore.choices[0].message.content)
 
 
@@ -170,62 +173,51 @@ else:
             model="gpt35",
             messages=[
                   {"role": "system", "content": transcript.text},
-                  {"role": "user", "content":"Calculate the listen to talk ratio as a percentage.Don't show any calculation in the steps.The final answer should be a percentage without any text or any special charecter.if you don't know the answer or unable to perform calculations , give the output as 50%"}
+                  {"role": "user", "content":"Calculate the listen to talk ratio as a percentage.Don't show any calculation in the steps.The final answer should be a percentage without any text or any special charecter.if you don't know the answer or unable to perform calculations , give the output as 50.Do not include the percentage symbol."}
 
                      ]
                                            )
 
-            st.markdown(f'<div style="background-color: {random_color()}; padding: 10px; border-radius: 5px;"><h3>Listen to talk ratio:</h3></div>', unsafe_allow_html=True)
+            st.markdown(f'<div style="background-color: {random_color()}; padding: 10px; border-radius: 5px;">'
+            f'<h4 style="font-size: 20px;">Listen to Talk Ratio (0-100%)</h4>'
+            f'<p style="font-size: 16px;">Talk-Listen Ratio = (Rep\'s Talking Time / Prospect\'s Talking Time) * 100</p>'
+            f'</div>', unsafe_allow_html=True)
             st.write(listentotalkratio.choices[0].message.content)
 
-            customersatisfactionscore = openai.chat.completions.create(
-            model="gpt35",
-            messages=[
-                  {"role": "system", "content": transcript.text},
-                  {"role": "user", "content":"Calculate the customer satisfaction score from 1 to 10 based on the summary generated above between the caller and callee. 1 being very disappointed and 10 being happiest.The output should just be a number without any text or special character. If you don't know the answer or can't perform the calculation, give the output as 4."}
-
-                     ]
-                                           )
-
-            st.markdown(f'<div style="background-color: {random_color()}; padding: 10px; border-radius: 5px;"><h3>Custumer Satisfaction Score:</h3></div>', unsafe_allow_html=True)
-            st.write(customersatisfactionscore.choices[0].message.content)
 
             engagementrate = openai.chat.completions.create(
             model="gpt35",
             messages=[
                   {"role": "system", "content": transcript.text},
-                  {"role": "user", "content":"Calculate the engagement rate as a percentage which gives a rough estimate of the percentage of words the caller speakes in the entire conversation against the callee.The output should just be a number without any text or special character. If you don't know the answer or are unable to calculate it, provide output as 50%.Do not show any calculation steps. Just give the number as final output."}
+                  {"role": "user", "content":"Calculate the engagement rate as a percentage which gives a rough estimate of the percentage of words the caller speakes in the entire conversation against the callee in the above generated transcription.The output should just be a number without any text or special character. If you don't know the answer or are unable to calculate it, provide output as 50.Do not show any calculation steps. Just give the number as final output."}
 
                      ]
                                            )
 
-            st.markdown(f'<div style="background-color: {random_color()}; padding: 10px; border-radius: 5px;"><h3>Engagement Rate:</h3></div>', unsafe_allow_html=True)
+            st.markdown(f'<div style="background-color: {random_color()}; padding: 10px; border-radius: 5px;">'
+            f'<h4 style="font-size: 20px;">Engagement Rate (0-100%)</h4>'
+            f'<p style="font-size: 16px;">Engagement Rate = Total Customers / Number of Engagements * 100</p>'
+            f'</div>', unsafe_allow_html=True)
+
             st.write(engagementrate.choices[0].message.content)
 
             positivenegativeratio = openai.chat.completions.create(
             model="gpt35",
             messages=[
                   {"role": "system", "content": transcript.text},
-                  {"role": "user", "content":"Calculate the % of positive phrases against negative phrases in the above generated summary.The output should just be a number without any text or special character. If you don't know the answer or are unable to calculate it, provide output as 50%.Do not show any calculation steps. Just give the number as final output. "}
+                  {"role": "user", "content":"Calculate the percentage of positive phrases against negative phrases in the above generated summary.The output should just be a number without any text or special character. If you don't know the answer or are unable to calculate it, provide output as 50.Do not show any calculation steps. Just give the number as final output. "}
 
                      ]
                                            )
 
-            st.markdown(f'<div style="background-color: {random_color()}; padding: 10px; border-radius: 5px;"><h3>PositiveNegative Ratio:</h3></div>', unsafe_allow_html=True)
+            st.markdown(f'<div style="background-color: {random_color()}; padding: 10px; border-radius: 5px;">'
+            f'<h4 style="font-size: 20px;">Positive Interaction Rate (0-100%)</h4>'
+            f'<p style="font-size: 16px;">Positive-Negative Ratio = (Number of Negative Interactions / Number of Positive Interactions) * 100</p>'
+            f'</div>', unsafe_allow_html=True)
+
             st.write(positivenegativeratio.choices[0].message.content)
 
-            silenceduration = openai.chat.completions.create(
-            model="gpt35",
-            messages=[
-                  {"role": "system", "content": transcript.text},
-                  {"role": "user", "content":"Calculate the silence duration as the total amount of silence or pauses during the conversation, which can indicate thoughtfulness or discomfort.pick the transcription from the above generated transcription.Just show me the number in seconds without any text or special character. If you don't know the answer or are unable to calculate it, provide output as 0.Do not show any calculation steps. Just give the number as final output. "}
-
-                     ]
-                                           )
-
-            st.markdown(f'<div style="background-color: {random_color()}; padding: 10px; border-radius: 5px;"><h3>Silence Duration:</h3></div>', unsafe_allow_html=True)
-            st.write(silenceduration.choices[0].message.content)
-
+           
 
             problem = openai.chat.completions.create(
             model="gpt35",
@@ -268,12 +260,16 @@ else:
                   {"role": "system", "content": transcript.text},
                   {"role": "user", "content": """
 {
-Based on the Empathy generated between the caller and callee, generate an Emapthy Score between 0 to 10.If you are unsure generate 4.Print only the number without any text or special characters."""}
+Based on the Empathy generated between the caller and callee, generate an Emapthy Score between 0 to 100.If you are unsure generate 40.Print only the number without any text or special characters."""}
 
                      ]
                                            )
 
-            st.markdown(f'<div style="background-color: {random_color()}; padding: 10px; border-radius: 5px;"><h3>Empathy Score:</h3></div>', unsafe_allow_html=True)
+            st.markdown(f'<div style="background-color: {random_color()}; padding: 10px; border-radius: 5px;">'
+            f'<h4 style="font-size: 20px;">Empathy Score (0-100%)</h4>'
+            f'<p style="font-size: 16px;">Identify specific behaviors or attributes that demonstrate empathy in customer interactions. This may include active listening, acknowledging emotions, showing understanding, offering personalized solutions, etc.</p>'
+            f'</div>', unsafe_allow_html=True)
+
             st.write(empathyscore.choices[0].message.content)
 
 
@@ -285,7 +281,8 @@ Based on the Empathy generated between the caller and callee, generate an Emapth
                      ]
                                            )
 
-
+            st.markdown(f'<div style="background-color: {random_color()}; padding: 10px; border-radius: 5px;"><h3>Category:</h3></div>', unsafe_allow_html=True)
+            st.write(category.choices[0].message.content)
             uploaded_file_name = uploaded_file.name[:255] if uploaded_file.name else ''
             transcript_text = transcript.text[:4000] if transcript.text else ''
             senti_content = senti.choices[0].message.content[:255] if senti.choices else ''
@@ -297,17 +294,24 @@ Based on the Empathy generated between the caller and callee, generate an Emapth
 
             cursor = conn.cursor()
             cursor.execute('''
-                INSERT INTO TranscriptionResults (AudioFile, Transcription, Sentiment, KeyPhrases, Intent, ProblemStatement, Empathy, CallCategory)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-            ''', (
-               uploaded_file_name,
-               transcript_text,
-               senti_content,
-               keywords_content,
-               intent_content,
-               problem_content,
-               empathy_content,
-               category_content
+                          INSERT INTO TranscriptionResults 
+                                    (AudioFile, Transcription, Sentiment, KeyPhrases, Intent, ProblemStatement, Empathy, CallCategory,
+                                         SentimentScore, ListenToTalkRatio, EngagementRatio, PositiveInteractionRatio, EmpathyScore)
+                          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                          ''', (
+            uploaded_file_name,
+            transcript_text,
+            senti_content,
+            keywords_content,
+            intent_content,
+            problem_content,
+            empathy_content,
+            category_content,
+            sentiscore.choices[0].message.content if sentiscore.choices else 0,  # SentimentScore
+            listentotalkratio.choices[0].message.content if listentotalkratio.choices else 0,  # ListenToTalkRatio
+            engagementrate.choices[0].message.content if engagementrate.choices else 0,  # EngagementRatio
+            positivenegativeratio.choices[0].message.content if positivenegativeratio.choices else 0,  # PositiveInteractionRatio
+            empathyscore.choices[0].message.content if empathyscore.choices else 0  # EmpathyScore
             ))
             conn.commit()
             cursor.close()
