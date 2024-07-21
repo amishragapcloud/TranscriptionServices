@@ -107,7 +107,18 @@ else:
 
 
 
-            config = aai.TranscriptionConfig(speaker_labels=True)
+            config = aai.TranscriptionConfig(speaker_labels=True).set_redact_pii(
+                         policies=[
+                                     aai.PIIRedactionPolicy.medical_condition,
+                                     aai.PIIRedactionPolicy.email_address,
+                                     aai.PIIRedactionPolicy.phone_number,
+                                     aai.PIIRedactionPolicy.banking_information,
+                                     aai.PIIRedactionPolicy.credit_card_number,
+                                     aai.PIIRedactionPolicy.credit_card_cvv,
+                                     aai.PIIRedactionPolicy.date_of_birth,
+                                     aai.PIIRedactionPolicy.person_name,
+                                  ]
+                                                                            )
 
             transcriber = aai.Transcriber()
             transcript = transcriber.transcribe(
@@ -173,7 +184,7 @@ else:
             model="gpt35",
             messages=[
                   {"role": "system", "content": transcript.text},
-                  {"role": "user", "content":"Calculate the listen to talk ratio as a percentage.Don't show any calculation in the steps.The final answer should be a percentage without any text or any special charecter.if you don't know the answer or unable to perform calculations , give the output as 50.Do not include the percentage symbol."}
+                  {"role": "user", "content":"Calculate the listen to talk ratio as a percentage.Don't show any calculation in the steps.The final answer should be a percentage without any text or any special charecter.if you don't know the answer or unable to perform calculations , give the output as 50.Do not include the percentage symbol.Any text self generated and containing the phrase- text-based AI, I don't have the ability to- should default to 50"}
 
                      ]
                                            )
