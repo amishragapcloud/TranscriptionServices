@@ -136,6 +136,7 @@ else:
 
             st.markdown(f'<div style="background-color: {random_color()}; padding: 10px; border-radius: 5px;"><h3>Sentiment Breakdown:</h3></div>', unsafe_allow_html=True)
             for sentiment_result in transcript.sentiment_analysis:
+               st.markdown(f'<b>Speaker {sentiment_result.speaker}</b>', unsafe_allow_html=True)
                sentiment_text = f"Sentiment: {sentiment_result.sentiment}"
                if sentiment_result.sentiment == aai.SentimentType.neutral:
                   st.markdown(f'<div style="background-color: yellow; padding: 5px; border-radius: 5px;">{sentiment_text}</div>', unsafe_allow_html=True)
@@ -146,8 +147,15 @@ else:
                elif sentiment_result.sentiment == aai.SentimentType.negative:
                   st.markdown(f'<div style="background-color: lightcoral; padding: 5px; border-radius: 5px;">{sentiment_text}</div>', unsafe_allow_html=True)
                   negative_count += 1
-               st.write(f"Confidence: {sentiment_result.confidence}")
-               st.write(f"Timestamp: {sentiment_result.start} - {sentiment_result.end}")
+               confidence_percentage = sentiment_result.confidence * 100
+               confidence_percentage_rounded = round(confidence_percentage, 0) 
+               st.write(f"Confidence: {confidence_percentage_rounded}%")
+               st.write(f"Sentiment Phrase: {sentiment_result.text}")
+               start_seconds = sentiment_result.start / 1000.0
+               end_seconds = sentiment_result.end / 1000.0
+               st.write(f"Timestamp: {start_seconds:.3f} - {end_seconds:.3f} seconds")
+               st.markdown('---')
+
 
             st.markdown(f'''
     <div style="">
