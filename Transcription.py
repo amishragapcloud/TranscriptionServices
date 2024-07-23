@@ -107,27 +107,58 @@ else:
 
 
 
-            config = aai.TranscriptionConfig(speaker_labels=True).set_redact_pii(
-                         policies=[
-                                     aai.PIIRedactionPolicy.medical_condition,
-                                     aai.PIIRedactionPolicy.email_address,
-                                     aai.PIIRedactionPolicy.phone_number,
-                                     aai.PIIRedactionPolicy.banking_information,
-                                     aai.PIIRedactionPolicy.credit_card_number,
-                                     aai.PIIRedactionPolicy.credit_card_cvv,
-                                     aai.PIIRedactionPolicy.date_of_birth,
-                                     aai.PIIRedactionPolicy.person_name,
-                                  ]
-                                                                            )
+            config = aai.TranscriptionConfig(speaker_labels=True, sentiment_analysis=True).set_redact_pii(
+                              policies=[
+                                           aai.PIIRedactionPolicy.medical_condition,
+                                           aai.PIIRedactionPolicy.email_address,
+                                           aai.PIIRedactionPolicy.phone_number,
+                                           aai.PIIRedactionPolicy.banking_information,
+                                           aai.PIIRedactionPolicy.credit_card_number,
+                                           aai.PIIRedactionPolicy.credit_card_cvv,
+                                           aai.PIIRedactionPolicy.date_of_birth
+                                       ]
+                                                                                                          )
 
             transcriber = aai.Transcriber()
-            transcript = transcriber.transcribe(
-            FILE_URL,
-            config=config
-                                              )
+            transcript = transcriber.transcribe(FILE_URL, config=config)
+
+
+            neutral_count = 0
+            positive_count = 0
+            negative_count = 0
+
+
+                                   
             st.markdown(f'<div style="background-color: {random_color()}; padding: 10px; border-radius: 5px;"><h3>Transcript:</h3></div>', unsafe_allow_html=True)
             for utterance in transcript.utterances:
-               st.write(f"Speaker {utterance.speaker}: {utterance.text}")
+                st.write(f"Speaker {utterance.speaker}: {utterance.text}")
+
+
+            st.markdown(f'<div style="background-color: {random_color()}; padding: 10px; border-radius: 5px;"><h3>Sentiment Breakdown:</h3></div>', unsafe_allow_html=True)
+            for sentiment_result in transcript.sentiment_analysis:
+               sentiment_text = f"Sentiment: {sentiment_result.sentiment}"
+               if sentiment_result.sentiment == aai.SentimentType.neutral:
+                  st.markdown(f'<div style="background-color: yellow; padding: 5px; border-radius: 5px;">{sentiment_text}</div>', unsafe_allow_html=True)
+                  neutral_count += 1
+               elif sentiment_result.sentiment == aai.SentimentType.positive:
+                  st.markdown(f'<div style="background-color: lightgreen; padding: 5px; border-radius: 5px;">{sentiment_text}</div>', unsafe_allow_html=True)
+                  positive_count += 1
+               elif sentiment_result.sentiment == aai.SentimentType.negative:
+                  st.markdown(f'<div style="background-color: lightcoral; padding: 5px; border-radius: 5px;">{sentiment_text}</div>', unsafe_allow_html=True)
+                  negative_count += 1
+               st.write(f"Confidence: {sentiment_result.confidence}")
+               st.write(f"Timestamp: {sentiment_result.start} - {sentiment_result.end}")
+
+            st.markdown(f'''
+    <div style="">
+        <h3 style="font-weight: bold;">Sentiment Counts:</h3>
+        <p style="font-weight: bold;">Neutral: {neutral_count}</p>
+        <p style="font-weight: bold;">Positive: {positive_count}</p>
+        <p style="font-weight: bold;">Negative: {negative_count}</p>
+    </div>
+''', unsafe_allow_html=True)
+
+
 
             summary = openai.chat.completions.create(
             model="gpt35",
